@@ -13,6 +13,11 @@ Building a REST Service with Spring Boot and MySql using Thymeleaf for UI
 
 ### Dependencies
 You will need a mySQL Database up and running to run this application.
+You can use the following commands to run mySQL in docker.
+
+```
+docker compose up
+```
 
 ### Building
 
