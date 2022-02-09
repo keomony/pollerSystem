@@ -3,18 +3,16 @@ package com.kry.services;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.repositories.PollerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PollerService {
 
     private final PollerRepository pollerRepository;
-
-    public PollerService(PollerRepository pollerRepository) {
-        this.pollerRepository = pollerRepository;
-    }
 
     public void save(Poller poller) throws PollerException {
 

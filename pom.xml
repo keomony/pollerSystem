@@ -22,6 +22,7 @@
         <retrofit2.version>2.9.0</retrofit2.version>
         <mysql.jdbc.driver.version>8.0.28</mysql.jdbc.driver.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <dependencies>
@@ -61,6 +62,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

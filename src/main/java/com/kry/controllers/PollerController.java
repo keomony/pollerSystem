@@ -3,6 +3,7 @@ package com.kry.controllers;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.services.PollerService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,13 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@AllArgsConstructor
 public class PollerController {
 
     private final PollerService pollerService;
-
-    public PollerController(PollerService pollerService) {
-        this.pollerService = pollerService;
-    }
 
     @GetMapping("/addnew")
     public String showAddNewForm(Poller poller) {
