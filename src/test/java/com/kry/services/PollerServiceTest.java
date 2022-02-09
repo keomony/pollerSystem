@@ -36,7 +36,7 @@ public class PollerServiceTest {
         Poller pollerStub = new Poller(1, "better", "www.good.com");
 
         //When
-        underTest.storeAPoller(pollerStub);
+        underTest.save(pollerStub);
 
         //Then
         verify(pollerRepository, times(1)).save(pollerStub);
@@ -67,10 +67,10 @@ public class PollerServiceTest {
         Poller poller = new Poller(2, "go", "www.go.com");
 
         //When
-        underTest.deletePoller("2");
+        underTest.delete(poller.getId());
 
         //Then
-        verify(pollerRepository, times(1)).deleteById(Integer.valueOf("2"));
+        verify(pollerRepository, times(1)).deleteById(poller.getId());
     }
 
 

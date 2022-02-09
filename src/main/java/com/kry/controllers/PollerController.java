@@ -3,13 +3,15 @@ package com.kry.controllers;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.services.PollerService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("/pollers")
 public class PollerController {
 
     private final PollerService pollerService;
@@ -18,29 +20,54 @@ public class PollerController {
         this.pollerService = pollerService;
     }
 
-    @PostMapping
-    public ResponseEntity addNewPoller(@RequestBody Poller poller) {
+    @GetMapping("/addnew")
+    public String showAddNewForm(Poller poller) {
+        return "add-poller";
+    }
 
-        try {
-            pollerService.storeAPoller(poller);
-
-            return new ResponseEntity(HttpStatus.CREATED);
-
-        } catch (PollerException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    @PostMapping("/addpoller")
+    public String addPoller(@Validated Poller poller, BindingResult result) throws PollerException {
+        if (result.hasErrors()) {
+            return "add-poller";
         }
+
+        pollerService.save(poller);
+        return "redirect:/index";
     }
 
-    @GetMapping
-    public @ResponseBody
-    Iterable<Poller> getAllPollers() {
-        // This returns a JSON  with the pollers
-        return pollerService.retrieveAllPollers();
+    @GetMapping("/index")
+    public String showPollerList(Model model) {
+        model.addAttribute("pollers", pollerService.retrieveAllPollers());
+        return "index";
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deletePoller(@PathVariable("id") String id) throws PollerException {
-        pollerService.deletePoller(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    @GetMapping("/edit/{id}")
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Poller poller = pollerService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid service Id:" + id));
+
+        model.addAttribute("poller", poller);
+        return "update-poller";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updatePoller(@PathVariable("id") Integer id, @Validated Poller poller, BindingResult result) throws PollerException {
+
+        if (result.hasErrors()) {
+            poller.setId(id);
+            return "update-poller";
+        }
+
+        pollerService.save(poller);
+
+        return "redirect:/index";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deletePoller(@PathVariable("id") Integer id) throws PollerException {
+        Poller poller = pollerService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid service Id:" + id));
+        pollerService.delete(poller.getId());
+
+        return "redirect:/index";
     }
 }

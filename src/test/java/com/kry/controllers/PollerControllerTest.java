@@ -11,13 +11,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PollerController.class)
 @AutoConfigureMockMvc
@@ -30,30 +31,22 @@ public class PollerControllerTest {
     private PollerService pollerService;
 
     @Test
-    public void addNewPoller_shouldReturnCreated_whenSuccessful() throws Exception {
-
-        //When
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/pollers")
-                        .content("{\"name\":\"test\",\"url\":\"www.test.com\"}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-
-    @Test
-    public void addNewPoller_shouldThrowError_whenUnsuccessful() throws PollerException, Exception {
+    public void addPoller_shouldRedirectToIndexPage() throws Exception {
 
         //Given
-        doThrow(new PollerException("Something is wrong. The data is missing!")).when(pollerService).storeAPoller(any());
 
         //When
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/pollers")
-                        .content("{}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
-    }
+                        .post("/addpoller")
+                        .param("id", "1")
+                        .param("name", "test")
+                        .param("url", "www.test.com")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                //Then
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/index"));
 
+    }
 
     @Test
     public void getAllPollers_shouldReturnListOfPollers() throws Exception {
@@ -64,26 +57,31 @@ public class PollerControllerTest {
 
         //When
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("/pollers"))
+                        .get("/index"))
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(MockMvcResultMatchers.content().json("[{\"id\":1,\"name\": \"kr\", \"url\":\"www.kr.com\"}]"));
+                .andExpect(view().name("index"))
+                .andExpect(model().attribute("pollers", equalTo(List.of(pollerStub))))
+                .andExpect(content().string(containsString("www.kr.com")));
     }
 
     @Test
-    public void deletePoller_shouldReturnOKStatus() throws Exception, PollerException {
+    public void deletePoller_shouldRedirectToIndexPage() throws Exception, PollerException {
 
         //Given
+        Poller pollerStub = new Poller(1, "kr", "www.kr.com");
+        when(pollerService.findById(1)).thenReturn(Optional.of(pollerStub));
 
         //When
         this.mockMvc.perform(MockMvcRequestBuilders
-                .delete("/pollers/delete/1"))
+                        .get("/delete/{id}", pollerStub.getId()))
                 //Then
-                .andExpect(status().isNoContent());
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/index"))
+                .andExpect(model().attribute("pollers", equalTo(null)));
 
         //Then
-        verify(pollerService, times(1)).deletePoller("1");
+        verify(pollerService, times(1)).delete(pollerStub.getId());
 
     }
 }

@@ -5,6 +5,8 @@ import com.kry.models.Poller;
 import com.kry.repositories.PollerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PollerService {
 
@@ -14,10 +16,10 @@ public class PollerService {
         this.pollerRepository = pollerRepository;
     }
 
-    public void storeAPoller(Poller poller) throws PollerException {
+    public void save(Poller poller) throws PollerException {
 
         if (poller.getUrl() == null || poller.getName() == null) {
-            throw new PollerException("Something is wrong. The data is missing!");
+            throw new PollerException("Something is wrong. The data is missing! ");
         }
 
         try {
@@ -33,13 +35,17 @@ public class PollerService {
         return pollerRepository.findAll();
     }
 
-    public void deletePoller(String id) throws PollerException {
+    public void delete(Integer id) throws PollerException {
 
         if(id !=null ) {
-            pollerRepository.deleteById(Integer.valueOf(id));
+            pollerRepository.deleteById(id);
 
         } else {
             throw new PollerException("Something is wrong. The data can not be deleted! The id is empty");
         }
+    }
+
+    public Optional<Poller> findById(Integer id) {
+        return pollerRepository.findById(id);
     }
 }
