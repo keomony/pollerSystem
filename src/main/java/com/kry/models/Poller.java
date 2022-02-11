@@ -3,7 +3,6 @@ package com.kry.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,6 +38,8 @@ public class Poller {
 
     @CreatedDate
     private LocalDate creationDate = LocalDate.now();
+
+    private String responseStatus = "FAIL";
 
     public Poller(int id, String name, String url) {
         this.id = id;

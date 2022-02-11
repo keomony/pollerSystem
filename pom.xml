@@ -19,28 +19,16 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <retrofit2.version>2.9.0</retrofit2.version>
         <mysql.jdbc.driver.version>8.0.28</mysql.jdbc.driver.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <lombok.version>1.18.22</lombok.version>
+        <awaitility.version>4.1.1</awaitility.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>retrofit</artifactId>
-            <version>${retrofit2.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>converter-Gson</artifactId>
-            <version>${retrofit2.version}</version>
         </dependency>
 
         <dependency>
@@ -69,6 +57,13 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${awaitility.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
