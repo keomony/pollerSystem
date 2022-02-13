@@ -35,7 +35,7 @@ public class PollerCall {
 
                 if (pollerToBeUpdated.isPresent()) {
 
-                    pollerToBeUpdated.get().setResponseStatus(getStatus(poller.getUrl()));
+                    pollerToBeUpdated.get().setResponseStatus(getStatus(poller.getUrl()).name());
 
                     pollerService.save(pollerToBeUpdated.get());
 
@@ -45,7 +45,7 @@ public class PollerCall {
 
     }
 
-    private String getStatus(String uri) {
+    private Status getStatus(String uri) {
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -58,13 +58,13 @@ public class PollerCall {
 
             if (response != null) {
                 if (response.statusCode() == HttpStatus.OK.value()) {
-                    return "OK";
+                    return Status.OK;
                 }
             }
         } catch (Exception e) {
-            return "FAIL";
+            return Status.FAIL;
         }
 
-        return "FAIL";
+        return Status.FAIL;
     }
 }
