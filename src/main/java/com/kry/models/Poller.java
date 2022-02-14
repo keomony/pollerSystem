@@ -39,7 +39,7 @@ public class Poller {
     @CreatedDate
     private LocalDate creationDate = LocalDate.now();
 
-    private String responseStatus = "FAIL";
+    private String responseStatus = "Updating...";
 
     public Poller(int id, String name, String url) {
         this.id = id;
