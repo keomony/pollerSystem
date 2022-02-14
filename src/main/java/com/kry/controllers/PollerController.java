@@ -38,6 +38,11 @@ public class PollerController {
         model.addAttribute("pollers", pollerService.retrieveAllPollers());
         return "index";
     }
+    @GetMapping("/pollers")
+    public String showPollerListOnly(Model model) {
+        model.addAttribute("pollers", pollerService.retrieveAllPollers());
+        return "pollers";
+    }
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {

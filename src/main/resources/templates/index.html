@@ -10,36 +10,36 @@
     <link rel="stylesheet" href="https://unpkg.com/shards-ui@latest/dist/css/shards.min.css">
 </head>
 <body>
-<div th:switch="${pollers}" class="container my-5">
+<div th:switch="${pollers.isEmpty()}" class="container my-5">
     <div class="row">
         <div class="col-md-6">
-            <h2 th:case="null">No services yet!</h2>
-            <div th:case="*">
-                <h2 class="my-5">Services</h2>
-                <table class="table table-striped table-responsive-md">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>URL</th>
-                        <th>Status</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="poller : ${pollers}">
-                        <td th:text="${poller.name}"></td>
-                        <td th:text="${poller.url}"></td>
-                        <td th:text="${poller.responseStatus}"></td>
-                        <td><a th:href="@{/edit/{id}(id=${poller.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                        <td><a th:href="@{/delete/{id}(id=${poller.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="my-5"><a href="/addnew" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a></p>
+            <h2 th:case="true">No services yet!</h2>
+            <tbody th:case="false">
+            <h2 class="my-5">Services</h2>
+            <table class="table table-striped table-responsive-md">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody id="pollers">
+                <div th:replace="pollers.html"></div>
+                </tbody>
+            </table>
         </div>
+        <p class="my-5"><a href="/addnew" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a></p>
     </div>
 </div>
+</div>
+
+<script type="text/javascript">
+    setInterval(function () {
+        fetch("/pollers").then(data => data.text()).then(data => document.getElementById("pollers").innerHTML = data)
+    }, 1000 * 5);
+</script>
 </body>
 </html>

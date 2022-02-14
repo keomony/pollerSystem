@@ -1,0 +1,9 @@
+<tr th:each="poller : ${pollers}">
+    <td th:text="${poller.name}"></td>
+    <td th:text="${poller.url}"></td>
+    <td th:text="${poller.responseStatus}"></td>
+    <td><a th:href="@{/edit/{id}(id=${poller.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a>
+    </td>
+    <td><a th:href="@{/delete/{id}(id=${poller.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a>
+    </td>
+</tr>
