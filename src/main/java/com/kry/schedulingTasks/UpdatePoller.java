@@ -1,25 +1,22 @@
 package com.kry.schedulingTasks;
 
+import com.kry.clients.PollerCall;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.services.PollerService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @AllArgsConstructor
-public class PollerCall {
+public class UpdatePoller {
 
     private final PollerService pollerService;
+    private final PollerCall client;
 
     //todo : fixedRate should be configurable
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.SECONDS)
@@ -35,7 +32,8 @@ public class PollerCall {
 
                 if (pollerToBeUpdated.isPresent()) {
 
-                    pollerToBeUpdated.get().setResponseStatus(getStatus(poller.getUrl()).name());
+                    String updatedStatus = client.getStatus(poller.getUrl()).name();
+                    pollerToBeUpdated.get().setResponseStatus(updatedStatus);
 
                     pollerService.save(pollerToBeUpdated.get());
 
@@ -45,26 +43,4 @@ public class PollerCall {
 
     }
 
-    private Status getStatus(String uri) {
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(uri))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response != null) {
-                if (response.statusCode() == HttpStatus.OK.value()) {
-                    return Status.OK;
-                }
-            }
-        } catch (Exception e) {
-            return Status.FAIL;
-        }
-
-        return Status.FAIL;
-    }
 }
