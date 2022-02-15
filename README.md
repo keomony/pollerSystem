@@ -1,5 +1,9 @@
 # PollerSystem
-Building a REST Service with Spring Boot and MySql using Thymeleaf for UI
+Building a REST Service with Spring Boot and MySql using Thymeleaf for UI.
+
+A simple service poller that keeps a list of
+services (defined by a URL), and periodically performs a HTTP GET request
+to each and stores a record of the response ("OK" or "FAIL").
 
 ## Version Info
 
@@ -13,7 +17,7 @@ Building a REST Service with Spring Boot and MySql using Thymeleaf for UI
 
 ### Dependencies
 You will need a mySQL Database up and running to run this application.
-You can use the following commands to run mySQL in docker.
+You can use the following commands to run mySQL in the background in docker.
 
 ```
 docker compose up -d
@@ -49,7 +53,7 @@ mvn clean test
 ## Project Structure
 * **Standard Java coding structure is used for the sample app**
 
-* Java code is located in the [`src.main.java`](src/main/java) directory
+* Java code is located in the [`src.main.java`](src/main/java/com/kry) directory
     * Controller is in under the controllers folder:
         - [`PollerController.java`](src/main/java/com/kry/controllers/PollerController.java)
     * Service class is in under the services folder:
@@ -68,4 +72,18 @@ mvn clean test
        - [`update-poller.html`](src/main/resources/templates/update-poller.html)
 
 * Property files are located in the [`src.main.resources`](src/main/resources) directory
-* JUnit test files are located in the [`src.test.java`](src/test/java) directory
+* JUnit test files are located in the [`src.test.java`](src/test/java/com/kry) directory
+
+### Functionalities covered in this project
+
+#### Basic requirements 
+  * A user needs to be able to add a new service with URL and a name
+  * Added services have to be kept when the server is restarted
+  * Display the name, url, creation time and status for each service
+  * Provide a README in english with instructions on how to run the
+  application
+
+#### Extra requirements
+  * Full create/update/delete functionality for services
+  * The results from the poller are automatically shown to the user (no
+need to reload the page to see results)
