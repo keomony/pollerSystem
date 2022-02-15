@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +45,23 @@ public class PollerServiceTest {
     }
 
     @Test
+    public void storeAPoller_whenDataIsMissing_shouldThrowPullerException() {
+
+        //Given
+        Poller poller = new Poller(1, null, "www.good.com");
+
+        //When
+        PollerException result = assertThrows(PollerException.class,
+                () -> underTest.save(poller)
+        );
+
+        //Then
+        verify(pollerRepository, times(0)).save(poller);
+        assertEquals("Name or Url is needed.", result.getMessage());
+    }
+
+
+    @Test
     public void retrieveAllPollers_shouldReturnAllPollers() {
 
         //Given
@@ -61,7 +79,7 @@ public class PollerServiceTest {
     }
 
     @Test
-    public void deletePoller_shouldDeletePoller() throws PollerException {
+    public void deletePoller_shouldDeletePoller() {
 
         //Given
         Poller poller = new Poller(2, "go", "www.go.com");

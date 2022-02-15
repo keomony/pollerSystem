@@ -17,15 +17,10 @@ public class PollerService {
     public void save(Poller poller) throws PollerException {
 
         if (poller.getUrl() == null || poller.getName() == null) {
-            throw new PollerException("Something is wrong. The data is missing! ");
+            throw new PollerException("Name or Url is needed.");
         }
 
-        try {
             pollerRepository.save(poller);
-
-        } catch (Exception e) {
-            throw new PollerException("Something is wrong. The data can not be saved!");
-        }
 
     }
 
@@ -33,17 +28,7 @@ public class PollerService {
         return pollerRepository.findAll();
     }
 
-    public void delete(Integer id) throws PollerException {
+    public void delete(Integer id) { pollerRepository.deleteById(id); }
 
-        if(id !=null ) {
-            pollerRepository.deleteById(id);
-
-        } else {
-            throw new PollerException("Something is wrong. The data can not be deleted! The id is empty");
-        }
-    }
-
-    public Optional<Poller> findById(Integer id) {
-        return pollerRepository.findById(id);
-    }
+    public Optional<Poller> findById(Integer id) { return pollerRepository.findById(id); }
 }

@@ -67,7 +67,7 @@ public class PollerController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePoller(@PathVariable("id") Integer id) throws PollerException {
+    public String deletePoller(@PathVariable("id") Integer id) {
         Poller poller = pollerService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid service Id:" + id));
         pollerService.delete(poller.getId());
 

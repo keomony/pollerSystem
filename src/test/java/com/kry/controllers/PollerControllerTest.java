@@ -1,6 +1,5 @@
 package com.kry.controllers;
 
-import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.services.PollerService;
 import org.junit.jupiter.api.Test;
@@ -66,7 +65,7 @@ public class PollerControllerTest {
     }
 
     @Test
-    public void deletePoller_shouldRedirectToIndexPage() throws Exception, PollerException {
+    public void deletePoller_shouldRedirectToIndexPage() throws Exception {
 
         //Given
         Poller pollerStub = new Poller(1, "kr", "www.kr.com");
