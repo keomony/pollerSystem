@@ -3,7 +3,6 @@ package com.kry.services;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.repositories.PollerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,10 +24,6 @@ public class PollerServiceTest {
     @Mock
     private PollerRepository pollerRepository;
 
-    @BeforeEach
-    public void setup() {
-        underTest = new PollerService(pollerRepository);
-    }
 
     @Test
     public void storeAPoller_shouldBeSavedInTheRepository() throws PollerException {

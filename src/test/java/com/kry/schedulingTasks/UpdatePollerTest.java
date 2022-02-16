@@ -5,7 +5,6 @@ import com.kry.clients.Status;
 import com.kry.exceptions.PollerException;
 import com.kry.models.Poller;
 import com.kry.services.PollerService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,11 +28,6 @@ class UpdatePollerTest {
 
     @Mock
     private PollerCall client;
-
-    @BeforeEach
-    public void setup() {
-        underTest = new UpdatePoller(pollerService, client);
-    }
 
     @Test
     public void updateStatus_shouldUpdateStatus() throws PollerException {
