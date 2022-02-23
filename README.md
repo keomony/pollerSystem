@@ -87,3 +87,26 @@ mvn clean test
   * Full create/update/delete functionality for services
   * The results from the poller are automatically shown to the user (no
 need to reload the page to see results)
+
+### Sequential Diagram
+
+#### Front end
+```mermaid
+sequenceDiagram
+   UI ->> Controller: Get Index
+   Controller ->> DB: Fetch Pollers
+   loop Every 5 Seconds
+      UI ->> Controller: Get Pollers Partial
+      Controller ->> DB: Fetch Pollers
+   end   
+```
+#### Back end
+```mermaid
+sequenceDiagram
+   loop Every 5 Seconds
+      UpdatePoller Job ->> DB: Fetch Pollers
+      UpdatePoller Job ->> External Service: URL
+      UpdatePoller Job ->> DB: Update Status
+   end   
+      
+```
